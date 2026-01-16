@@ -1,0 +1,269 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ContactForm from "../components/ContactForm.astro";
+import { stockists } from "../lib/data.js";
+
+const bars = stockists.filter((s) => s.type === "bar");
+const retailers = stockists.filter((s) => s.type === "retail");
+---
+
+<BaseLayout
+    title="Find León de Guerrero | Stockists & Locations"
+    description="Find where to taste the spirit or get in touch with our team. Locate León de Guerrero at select retailers and premium bars."
+>
+    <!-- Hero -->
+    <section class="py-20 bg-gradient-primary text-center">
+        <div class="container">
+            <h1 class="font-display font-bold text-text mb-4">
+                Connect & Locate
+            </h1>
+            <p class="text-text-muted max-w-2xl mx-auto">
+                Find where to taste the spirit or get in touch with our team.
+            </p>
+        </div>
+    </section>
+
+    <!-- Find Locations -->
+    <section class="py-12">
+        <div class="container">
+            <h2 class="font-display font-bold text-3xl text-text mb-8">
+                Find León de Guerrero
+            </h2>
+            <p class="text-text-muted mb-8">
+                Explore our select retailers and premium bars.
+            </p>
+
+            <!-- Toggle Buttons -->
+            <div class="flex gap-4 mb-8">
+                <button class="btn btn-primary" id="stockists-btn">
+                    Stockists
+                </button>
+                <button class="btn btn-ghost" id="bars-btn">
+                    Bars & Restaurants
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Location List -->
+                <div>
+                    <!-- Search -->
+                    <div class="mb-6">
+                        <input
+                            type="text"
+                            placeholder="Search by city or zip code..."
+                            class="input"
+                            id="location-search"
+                        />
+                    </div>
+
+                    <!-- Stockists List -->
+                    <div id="stockists-list" class="space-y-4">
+                        {
+                            retailers.map((location) => (
+                                <div class="card">
+                                    <div class="flex justify-between items-start mb-2">
+                                        <div>
+                                            <h3 class="font-display font-bold text-lg text-text">
+                                                {location.name}
+                                            </h3>
+                                            <span class="badge badge-green text-xs mt-1">
+                                                Retail
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <p class="text-text-muted text-sm mb-2">
+                                        {location.address}
+                                    </p>
+                                    <div class="flex items-center gap-4 text-sm">
+                                        <span
+                                            class={`${
+                                                location.hours.includes("Open")
+                                                    ? "text-accent"
+                                                    : "text-text-muted"
+                                            }`}
+                                        >
+                                            {location.hours}
+                                        </span>
+                                        <a
+                                            href="#"
+                                            class="text-accent hover:underline"
+                                        >
+                                            Directions →
+                                        </a>
+                                    </div>
+                                </div>
+                            ))
+                        }
+                    </div>
+
+                    <!-- Bars List (hidden by default) -->
+                    <div id="bars-list" class="space-y-4 hidden">
+                        {
+                            bars.map((location) => (
+                                <div class="card">
+                                    <div class="flex justify-between items-start mb-2">
+                                        <div>
+                                            <h3 class="font-display font-bold text-lg text-text">
+                                                {location.name}
+                                            </h3>
+                                            <span class="badge badge-gold text-xs mt-1">
+                                                Bar
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <p class="text-text-muted text-sm mb-2">
+                                        {location.address}
+                                    </p>
+                                    <div class="flex items-center gap-4 text-sm">
+                                        <span
+                                            class={`${
+                                                location.hours.includes("Open")
+                                                    ? "text-accent"
+                                                    : "text-text-muted"
+                                            }`}
+                                        >
+                                            {location.hours}
+                                        </span>
+                                        <a
+                                            href="#"
+                                            class="text-accent hover:underline"
+                                        >
+                                            Directions →
+                                        </a>
+                                    </div>
+                                </div>
+                            ))
+                        }
+                    </div>
+                </div>
+
+                <!-- Map -->
+                <div
+                    class="h-[600px] rounded-2xl overflow-hidden bg-bg-card border border-border"
+                >
+                    <div id="map" class="w-full h-full"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="py-20 bg-primary-dark" id="contact">
+        <div class="container">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- Contact Info -->
+                <div class="space-y-8">
+                    <div>
+                        <h2
+                            class="font-display font-bold text-3xl text-text mb-4"
+                        >
+                            Get in touch
+                        </h2>
+                        <p class="text-text-muted">
+                            For distribution inquiries, events, or just to say
+                            salud.
+                        </p>
+                    </div>
+
+                    <!-- Direct Contact -->
+                    <div class="space-y-6">
+                        <div>
+                            <h3
+                                class="font-display font-bold text-lg text-accent mb-2"
+                            >
+                                Direct Contact
+                            </h3>
+                            <a
+                                href="mailto:hola@leondeguerrero.com"
+                                class="text-text text-xl hover:text-accent transition-colors"
+                            >
+                                hola@leondeguerrero.com
+                            </a>
+                        </div>
+
+                        <div>
+                            <h3
+                                class="font-display font-bold text-lg text-accent mb-2"
+                            >
+                                Social
+                            </h3>
+                            <div class="flex gap-4">
+                                <a
+                                    href="https://instagram.com/leondeguerrero"
+                                    target="_blank"
+                                    class="text-text hover:text-accent transition-colors"
+                                >
+                                    Instagram
+                                </a>
+                                <a
+                                    href="https://linkedin.com/company/leondeguerrero"
+                                    target="_blank"
+                                    class="text-text hover:text-accent transition-colors"
+                                >
+                                    LinkedIn
+                                </a>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3
+                                class="font-display font-bold text-lg text-accent mb-2"
+                            >
+                                Headquarters
+                            </h3>
+                            <p class="text-text-muted">
+                                León de Guerrero Spirits<br />
+                                Oaxaca de Juárez, Mexico
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <ContactForm />
+            </div>
+        </div>
+    </section>
+</BaseLayout>
+
+<script>
+    // Toggle between stockists and bars
+    const stockistsBtn = document.getElementById("stockists-btn");
+    const barsBtn = document.getElementById("bars-btn");
+    const stockistsList = document.getElementById("stockists-list");
+    const barsList = document.getElementById("bars-list");
+
+    stockistsBtn?.addEventListener("click", () => {
+        stockistsBtn.classList.remove("btn-ghost");
+        stockistsBtn.classList.add("btn-primary");
+        barsBtn?.classList.remove("btn-primary");
+        barsBtn?.classList.add("btn-ghost");
+        stockistsList?.classList.remove("hidden");
+        barsList?.classList.add("hidden");
+    });
+
+    barsBtn?.addEventListener("click", () => {
+        barsBtn.classList.remove("btn-ghost");
+        barsBtn.classList.add("btn-primary");
+        stockistsBtn?.classList.remove("btn-primary");
+        stockistsBtn?.classList.add("btn-ghost");
+        barsList?.classList.remove("hidden");
+        stockistsList?.classList.add("hidden");
+    });
+
+    // Simple map placeholder
+    // In production, integrate with Leaflet or Mapbox
+    const mapElement = document.getElementById("map");
+    if (mapElement) {
+        mapElement.innerHTML = `
+      <div class="w-full h-full flex items-center justify-center bg-primary-light">
+        <div class="text-center space-y-4">
+          <p class="text-text-muted">Interactive Map</p>
+          <p class="text-sm text-text-muted">
+            Integrate with Leaflet or Mapbox for live map functionality
+          </p>
+        </div>
+      </div>
+    `;
+    }
+</script>

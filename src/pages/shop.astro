@@ -1,0 +1,204 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ProductCard from "../components/ProductCard.astro";
+import { products, categories } from "../lib/data.js";
+
+// Get category from URL params
+const urlParams = Astro.url.searchParams;
+const selectedCategory = urlParams.get("category") || "all";
+
+// Filter products by category
+const filteredProducts =
+    selectedCategory === "all"
+        ? products
+        : products.filter(
+              (p) =>
+                  p.category.toLowerCase() === selectedCategory.toLowerCase(),
+          );
+---
+
+<BaseLayout
+    title="Shop Artisanal Mezcal | León de Guerrero"
+    description="Browse our premium collection of artisanal mezcal. From classic Espadín to rare Tobalá and limited edition ensambles."
+>
+    <!-- Page Header -->
+    <section class="py-20 bg-gradient-primary">
+        <div class="container text-center">
+            <span
+                class="text-accent uppercase tracking-widest text-sm font-bold mb-4 block"
+            >
+                Mezcal Collection
+            </span>
+            <h1 class="font-display font-bold text-text mb-4">
+                Our Expressions
+            </h1>
+            <p class="text-text-muted max-w-2xl mx-auto">
+                Discover the soul of Oaxaca in every bottle. Browse our premium
+                artisanal mezcals available for direct purchase and wholesale.
+            </p>
+        </div>
+    </section>
+
+    <!-- Filters & Products -->
+    <section class="py-12">
+        <div class="container">
+            <!-- Category Filters -->
+            <div class="flex flex-wrap gap-3 mb-12 justify-center">
+                {
+                    categories.map((category) => (
+                        <a
+                            href={
+                                category.slug === "all"
+                                    ? "/shop"
+                                    : `/shop?category=${category.slug}`
+                            }
+                            class={`btn ${
+                                selectedCategory === category.slug
+                                    ? "btn-primary"
+                                    : "btn-ghost"
+                            }`}
+                        >
+                            {category.name}
+                        </a>
+                    ))
+                }
+            </div>
+
+            <!-- Sort Options -->
+            <div class="flex justify-between items-center mb-8">
+                <p class="text-text-muted">
+                    Showing <span class="text-accent font-bold"
+                        >{filteredProducts.length}</span
+                    > products
+                </p>
+                <select class="input w-auto" id="sort-select">
+                    <option value="recommended">Sort by: Recommended</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                    <option value="name">Name: A to Z</option>
+                </select>
+            </div>
+
+            <!-- Products Grid -->
+            {
+                filteredProducts.length > 0 ? (
+                    <div
+                        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+                        id="products-grid"
+                    >
+                        {filteredProducts.map((product) => (
+                            <ProductCard product={product} />
+                        ))}
+                    </div>
+                ) : (
+                    <div class="text-center py-20">
+                        <p class="text-text-muted text-lg">
+                            No products found in this category.
+                        </p>
+                    </div>
+                )
+            }
+
+            <!-- Load More (placeholder for pagination) -->
+            {
+                filteredProducts.length > 6 && (
+                    <div class="text-center mt-12">
+                        <button class="btn btn-secondary">
+                            Load More Expressions
+                        </button>
+                    </div>
+                )
+            }
+        </div>
+    </section>
+
+    <!-- Why Choose Section -->
+    <section class="py-20 bg-primary-dark">
+        <div class="container">
+            <h2
+                class="font-display font-bold text-3xl text-center text-text mb-12"
+            >
+                Why Choose León de Guerrero?
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="text-center space-y-3">
+                    <div
+                        class="w-16 h-16 mx-auto rounded-full bg-accent/10 flex items-center justify-center"
+                    >
+                        <span class="text-3xl">✓</span>
+                    </div>
+                    <h3 class="font-display font-bold text-lg text-text">
+                        Certified Organic
+                    </h3>
+                    <p class="text-text-muted text-sm">
+                        100% organic agave, sustainably harvested and certified.
+                    </p>
+                </div>
+
+                <div class="text-center space-y-3">
+                    <div
+                        class="w-16 h-16 mx-auto rounded-full bg-accent/10 flex items-center justify-center"
+                    >
+                        <span class="text-3xl">🤝</span>
+                    </div>
+                    <h3 class="font-display font-bold text-lg text-text">
+                        Direct Trade
+                    </h3>
+                    <p class="text-text-muted text-sm">
+                        Working directly with maestros mezcaleros in Oaxaca,
+                        crafting with care.
+                    </p>
+                </div>
+
+                <div class="text-center space-y-3">
+                    <div
+                        class="w-16 h-16 mx-auto rounded-full bg-accent/10 flex items-center justify-center"
+                    >
+                        <span class="text-3xl">🌱</span>
+                    </div>
+                    <h3 class="font-display font-bold text-lg text-text">
+                        Sustainable Farming
+                    </h3>
+                    <p class="text-text-muted text-sm">
+                        Active replanting programs to ensure future harvests.
+                    </p>
+                </div>
+
+                <div class="text-center space-y-3">
+                    <div
+                        class="w-16 h-16 mx-auto rounded-full bg-accent/10 flex items-center justify-center"
+                    >
+                        <span class="text-3xl">📦</span>
+                    </div>
+                    <h3 class="font-display font-bold text-lg text-text">
+                        Bulk Availability
+                    </h3>
+                    <p class="text-text-muted text-sm">
+                        Reliable supply chain for wholesale and retail partners.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+</BaseLayout>
+
+<script>
+    // Sort functionality
+    const sortSelect = document.getElementById(
+        "sort-select",
+    ) as HTMLSelectElement;
+    const productsGrid = document.getElementById("products-grid");
+
+    sortSelect?.addEventListener("change", (e) => {
+        const sortValue = (e.target as HTMLSelectElement).value;
+
+        // TODO: Implement actual sorting logic
+        console.log("Sort by:", sortValue);
+
+        // In a real implementation, you would:
+        // 1. Get all product cards
+        // 2. Sort them based on the selected criteria
+        // 3. Re-render the grid
+    });
+</script>

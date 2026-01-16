@@ -1,0 +1,291 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Button from "../components/Button.astro";
+import ProductCard from "../components/ProductCard.astro";
+import { products } from "../lib/data.js";
+
+// Get featured products (first 3)
+const featuredProducts = products.slice(0, 3);
+---
+
+<BaseLayout>
+	<!-- Hero Section -->
+	<section
+		class="relative min-h-screen flex items-center justify-center overflow-hidden"
+	>
+		<!-- Background Image -->
+		<div class="absolute inset-0 z-0">
+			<div
+				class="absolute inset-0 bg-gradient-to-b from-bg/50 via-bg/70 to-bg z-10"
+			>
+			</div>
+			<img
+				src="/images/hero-agave.jpg"
+				alt="Agave fields"
+				class="w-full h-full object-cover opacity-40"
+			/>
+		</div>
+
+		<!-- Hero Content -->
+		<div class="container relative z-20 text-center py-20">
+			<div class="max-w-4xl mx-auto space-y-8 animate-fade-in-up">
+				<span
+					class="inline-block text-accent uppercase tracking-widest text-sm font-bold mb-4"
+				>
+					Authentic Artisanal Mezcal
+				</span>
+
+				<h1 class="font-display font-black text-text">
+					SPIRIT OF THE<br />
+					<span class="text-gradient">WARRIOR</span>
+				</h1>
+
+				<p
+					class="text-xl md:text-2xl text-text-muted max-w-2xl mx-auto leading-relaxed"
+				>
+					An ancient legacy. Experience the artistry, tradition, and
+					the spirit of Oaxaca in every bottle.
+				</p>
+
+				<div
+					class="flex flex-col sm:flex-row gap-4 justify-center pt-4"
+				>
+					<Button href="/shop" variant="primary" size="lg">
+						Browse Mezcal
+					</Button>
+					<Button href="/story" variant="secondary" size="lg">
+						Our Story
+					</Button>
+				</div>
+			</div>
+
+			<!-- Scroll Indicator -->
+			<div
+				class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce"
+			>
+				<svg
+					class="w-6 h-6 text-accent"
+					fill="none"
+					stroke="currentColor"
+					viewBox="0 0 24 24"
+				>
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-width="2"
+						d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+				</svg>
+			</div>
+		</div>
+	</section>
+
+	<!-- Brand Story Preview -->
+	<section class="py-20 md:py-32">
+		<div class="container">
+			<div
+				class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center"
+			>
+				<!-- Image -->
+				<div class="order-2 lg:order-1 animate-slide-in-left">
+					<div
+						class="relative aspect-[4/5] rounded-2xl overflow-hidden"
+					>
+						<img
+							src="/images/maestro-mezcalero.jpg"
+							alt="Maestro Mezcalero in agave field"
+							class="w-full h-full object-cover"
+						/>
+					</div>
+				</div>
+
+				<!-- Content -->
+				<div
+					class="order-1 lg:order-2 space-y-6 animate-slide-in-right"
+				>
+					<span
+						class="text-accent uppercase tracking-widest text-sm font-bold"
+					>
+						Our Heritage
+					</span>
+
+					<h2 class="font-display font-bold text-text">
+						Born from the Earth.<br />
+						Forged by Time.
+					</h2>
+
+					<div class="space-y-4 text-text-muted">
+						<p>
+							In the heart of Oaxaca, where ancient traditions
+							meet modern craftsmanship, León de Guerrero honors
+							the centuries-old art of mezcal production.
+						</p>
+						<p>
+							We work only with the finest agave, hand-selected
+							from the rugged highlands. Each bottle represents a
+							commitment to authenticity, sustainability, and the
+							preservation of our ancestral methods.
+						</p>
+					</div>
+
+					<Button href="/story" variant="ghost" size="md">
+						Read the Full Story →
+					</Button>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Featured Products -->
+	<section class="py-20 bg-gradient-primary">
+		<div class="container">
+			<div class="text-center mb-12">
+				<span
+					class="text-accent uppercase tracking-widest text-sm font-bold mb-4 block"
+				>
+					Our Expressions
+				</span>
+				<h2 class="font-display font-bold text-text mb-4">
+					Rare & Refined
+				</h2>
+				<p class="text-text-muted max-w-2xl mx-auto">
+					Discover the soul of Oaxaca in every bottle. Browse our
+					premium artisanal mezcals available for direct purchase and
+					wholesale.
+				</p>
+			</div>
+
+			<div
+				class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12"
+			>
+				{
+					featuredProducts.map((product) => (
+						<ProductCard product={product} />
+					))
+				}
+			</div>
+
+			<div class="text-center">
+				<Button href="/shop" variant="secondary" size="lg">
+					View Full Catalog
+				</Button>
+			</div>
+		</div>
+	</section>
+
+	<!-- Artisanal Distillation -->
+	<section class="py-20 md:py-32">
+		<div class="container">
+			<div
+				class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center"
+			>
+				<!-- Content -->
+				<div class="space-y-8">
+					<span
+						class="text-accent uppercase tracking-widest text-sm font-bold"
+					>
+						Our Process
+					</span>
+
+					<h2 class="font-display font-bold text-text">
+						Artisanal Distillation
+					</h2>
+
+					<div class="space-y-6">
+						<div class="flex gap-4">
+							<div
+								class="flex-shrink-0 w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center"
+							>
+								<span class="text-2xl">🌱</span>
+							</div>
+							<div>
+								<h3
+									class="font-display font-bold text-lg text-text mb-2"
+								>
+									Wild Harvest
+								</h3>
+								<p class="text-text-muted">
+									Hand-selected wild agave from high-altitude
+									regions, harvested only when fully mature
+									after 8-25 years.
+								</p>
+							</div>
+						</div>
+
+						<div class="flex gap-4">
+							<div
+								class="flex-shrink-0 w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center"
+							>
+								<span class="text-2xl">🔥</span>
+							</div>
+							<div>
+								<h3
+									class="font-display font-bold text-lg text-text mb-2"
+								>
+									Traditional Roasting
+								</h3>
+								<p class="text-text-muted">
+									Slow-roasted in earthen pits for 3-5 days,
+									infusing each piña with rich, smoky
+									character.
+								</p>
+							</div>
+						</div>
+
+						<div class="flex gap-4">
+							<div
+								class="flex-shrink-0 w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center"
+							>
+								<span class="text-2xl">⚗️</span>
+							</div>
+							<div>
+								<h3
+									class="font-display font-bold text-lg text-text mb-2"
+								>
+									Copper Pot Distillation
+								</h3>
+								<p class="text-text-muted">
+									Double-distilled in traditional copper
+									stills to achieve perfect balance and
+									clarity.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Image -->
+				<div class="relative aspect-[4/3] rounded-2xl overflow-hidden">
+					<img
+						src="/images/distillery.jpg"
+						alt="Traditional copper stills"
+						class="w-full h-full object-cover"
+					/>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- CTA Section -->
+	<section class="py-20 bg-gradient-burgundy">
+		<div class="container text-center">
+			<div class="max-w-3xl mx-auto space-y-6">
+				<h2 class="font-display font-bold text-text">
+					Join the León de Guerrero Family
+				</h2>
+				<p class="text-text-muted text-lg">
+					Subscribe for exclusive releases, events, and insights into
+					the world of artisanal mezcal.
+				</p>
+				<form class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+					<input
+						type="email"
+						placeholder="Enter your email"
+						class="input flex-1"
+						required
+					/>
+					<Button type="submit" variant="primary"> Subscribe </Button>
+				</form>
+			</div>
+		</div>
+	</section>
+</BaseLayout>

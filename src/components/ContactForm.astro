@@ -1,0 +1,118 @@
+<div class="card max-w-2xl">
+    <h3 class="font-display font-bold text-2xl mb-6 text-text">Get in touch</h3>
+    <p class="text-text-muted mb-8">
+        For distribution inquiries, events, or just to say salud.
+    </p>
+
+    <form id="contact-form" class="space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label
+                    for="name"
+                    class="block text-sm font-medium text-text mb-2"
+                >
+                    Name
+                </label>
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    class="input"
+                    placeholder="Your name"
+                    required
+                />
+            </div>
+
+            <div>
+                <label
+                    for="email"
+                    class="block text-sm font-medium text-text mb-2"
+                >
+                    Email
+                </label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    class="input"
+                    placeholder="your@email.com"
+                    required
+                />
+            </div>
+        </div>
+
+        <div>
+            <label
+                for="inquiry-type"
+                class="block text-sm font-medium text-text mb-2"
+            >
+                Inquiry Type
+            </label>
+            <select id="inquiry-type" name="inquiryType" class="input">
+                <option value="general">General Inquiry</option>
+                <option value="distribution">Distribution</option>
+                <option value="wholesale">Wholesale</option>
+                <option value="events">Events</option>
+                <option value="press">Press</option>
+            </select>
+        </div>
+
+        <div>
+            <label
+                for="message"
+                class="block text-sm font-medium text-text mb-2"
+            >
+                Message
+            </label>
+            <textarea
+                id="message"
+                name="message"
+                rows="5"
+                class="input resize-none"
+                placeholder="How can we help you?"
+                required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-full md:w-auto">
+            Send Message
+        </button>
+    </form>
+
+    <div id="form-status" class="mt-4 hidden"></div>
+</div>
+
+<script>
+    const form = document.getElementById("contact-form") as HTMLFormElement;
+    const formStatus = document.getElementById("form-status");
+
+    form?.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+
+        // TODO: Integrate with your backend API or email service
+        // Example: Send to WordPress REST API, Formspree, or custom endpoint
+        console.log("Form submission:", data);
+
+        // Show success message
+        if (formStatus) {
+            formStatus.classList.remove("hidden");
+            formStatus.innerHTML = `
+        <div class="p-4 bg-accent/10 border border-accent rounded-lg">
+          <p class="text-accent font-medium">
+            ✓ Thank you! We'll get back to you soon.
+          </p>
+        </div>
+      `;
+        }
+
+        // Reset form
+        form.reset();
+
+        // Hide success message after 5 seconds
+        setTimeout(() => {
+            formStatus?.classList.add("hidden");
+        }, 5000);
+    });
+</script>

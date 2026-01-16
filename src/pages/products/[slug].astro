@@ -1,0 +1,411 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Button from "../../components/Button.astro";
+import { products } from "../../lib/data.js";
+
+// Generate static paths for all products
+export async function getStaticPaths() {
+    return products.map((product) => ({
+        params: { slug: product.slug },
+        props: { product },
+    }));
+}
+
+const { product } = Astro.props;
+const relatedProducts = products
+    .filter((p) => p.category === product.category && p.id !== product.id)
+    .slice(0, 3);
+---
+
+<BaseLayout
+    title={`${product.name} - ${product.abv} | León de Guerrero`}
+    description={product.description}
+    image={product.image}
+>
+    <section class="py-12">
+        <div class="container">
+            <!-- Breadcrumb -->
+            <nav class="text-sm text-text-muted mb-8">
+                <a href="/" class="hover:text-accent">Home</a>
+                <span class="mx-2">›</span>
+                <a href="/shop" class="hover:text-accent">Shop</a>
+                <span class="mx-2">›</span>
+                <span class="text-text">{product.name}</span>
+            </nav>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- Product Images -->
+                <div class="space-y-4">
+                    <!-- Main Image -->
+                    <div
+                        class="relative aspect-square rounded-2xl overflow-hidden bg-gradient-burgundy"
+                    >
+                        {
+                            product.badge && (
+                                <div class="absolute top-4 left-4 z-10">
+                                    <span
+                                        class={`badge ${
+                                            product.badge === "Top Rated"
+                                                ? "badge-green"
+                                                : product.badge ===
+                                                    "Best Seller"
+                                                  ? "badge-gold"
+                                                  : product.badge === "Limited"
+                                                    ? "badge-red"
+                                                    : "badge-purple"
+                                        }`}
+                                    >
+                                        {product.badge}
+                                    </span>
+                                </div>
+                            )
+                        }
+                        <img
+                            src={product.image}
+                            alt={product.name}
+                            class="w-full h-full object-cover"
+                        />
+                    </div>
+
+                    <!-- Gallery Thumbnails -->
+                    {
+                        product.gallery && product.gallery.length > 1 && (
+                            <div class="grid grid-cols-3 gap-4">
+                                {product.gallery.slice(0, 3).map((img) => (
+                                    <div class="aspect-square rounded-lg overflow-hidden bg-gradient-burgundy cursor-pointer hover:opacity-80 transition-opacity">
+                                        <img
+                                            src={img}
+                                            alt={product.name}
+                                            class="w-full h-full object-cover"
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                        )
+                    }
+                </div>
+
+                <!-- Product Info -->
+                <div class="space-y-6">
+                    <div>
+                        <span
+                            class="text-accent uppercase tracking-wider text-sm font-bold"
+                        >
+                            {product.category} • {product.abv}
+                        </span>
+                        <h1
+                            class="font-display font-bold text-4xl text-text mt-2"
+                        >
+                            {product.name}
+                        </h1>
+                        <p class="text-text-muted mt-4 text-lg">
+                            {product.description}
+                        </p>
+                    </div>
+
+                    <!-- Pricing -->
+                    <div class="border-t border-b border-border py-6">
+                        <div class="flex items-baseline gap-3 mb-4">
+                            <span
+                                class="font-display font-bold text-4xl text-text"
+                            >
+                                ${
+                                    (
+                                        product.discountPrice || product.price
+                                    ).toFixed(2)
+                                }
+                            </span>
+                            {
+                                product.discountPrice && (
+                                    <span class="text-text-muted line-through text-xl">
+                                        ${product.price.toFixed(2)}
+                                    </span>
+                                )
+                            }
+                            <span class="text-text-muted">/ Bottle</span>
+                        </div>
+
+                        {
+                            product.inStock ? (
+                                <p class="text-accent text-sm font-medium">
+                                    ✓ In Stock • Ships in 24 hours
+                                </p>
+                            ) : (
+                                <p class="text-red-500 text-sm font-medium">
+                                    Out of Stock
+                                </p>
+                            )
+                        }
+                    </div>
+
+                    <!-- Purchase Options -->
+                    <div class="space-y-3">
+                        <label
+                            class="flex items-center justify-between p-4 border-2 border-border rounded-lg cursor-pointer hover:border-accent transition-colors"
+                        >
+                            <div class="flex items-center gap-3">
+                                <input
+                                    type="radio"
+                                    name="purchase-option"
+                                    value="single"
+                                    checked
+                                    class="w-4 h-4"
+                                />
+                                <div>
+                                    <p class="font-bold text-text">
+                                        Single Bottle
+                                    </p>
+                                    <p class="text-sm text-text-muted">
+                                        Standard format
+                                    </p>
+                                </div>
+                            </div>
+                            <span class="font-bold text-text"
+                                >${
+                                    (
+                                        product.discountPrice || product.price
+                                    ).toFixed(2)
+                                }</span
+                            >
+                        </label>
+
+                        <label
+                            class="flex items-center justify-between p-4 border-2 border-border rounded-lg cursor-pointer hover:border-accent transition-colors"
+                        >
+                            <div class="flex items-center gap-3">
+                                <input
+                                    type="radio"
+                                    name="purchase-option"
+                                    value="case"
+                                    class="w-4 h-4"
+                                />
+                                <div>
+                                    <p class="font-bold text-text">Case of 6</p>
+                                    <p class="text-sm text-accent">Save 10%</p>
+                                </div>
+                            </div>
+                            <span class="font-bold text-text"
+                                >${
+                                    (
+                                        (product.discountPrice ||
+                                            product.price) *
+                                        6 *
+                                        0.9
+                                    ).toFixed(2)
+                                }</span
+                            >
+                        </label>
+
+                        <label
+                            class="flex items-center justify-between p-4 border-2 border-border rounded-lg cursor-pointer hover:border-accent transition-colors"
+                        >
+                            <div class="flex items-center gap-3">
+                                <input
+                                    type="radio"
+                                    name="purchase-option"
+                                    value="wholesale"
+                                    class="w-4 h-4"
+                                />
+                                <div>
+                                    <p class="font-bold text-text">
+                                        Wholesale (12 Cases)
+                                    </p>
+                                    <p class="text-sm text-accent">
+                                        Best value
+                                    </p>
+                                </div>
+                            </div>
+                            <span class="font-bold text-accent"
+                                >Request Quote</span
+                            >
+                        </label>
+                    </div>
+
+                    <!-- Add to Cart -->
+                    <div class="flex gap-4">
+                        <div
+                            class="flex items-center border border-border rounded-lg"
+                        >
+                            <button
+                                class="px-4 py-3 hover:bg-primary-light transition-colors"
+                                id="decrease-qty">−</button
+                            >
+                            <input
+                                type="number"
+                                value="1"
+                                min="1"
+                                class="w-16 text-center bg-transparent border-x border-border"
+                                id="quantity"
+                            />
+                            <button
+                                class="px-4 py-3 hover:bg-primary-light transition-colors"
+                                id="increase-qty">+</button
+                            >
+                        </div>
+                        <Button variant="primary" size="lg" class="flex-1">
+                            Add to Cart 🛒
+                        </Button>
+                    </div>
+
+                    <Button variant="ghost" size="md" class="w-full">
+                        Request Custom Wholesale Quote
+                    </Button>
+
+                    <!-- Tasting Notes -->
+                    <div class="bg-bg-card rounded-lg p-6 space-y-4">
+                        <h3 class="font-display font-bold text-lg text-text">
+                            Tasting Notes
+                        </h3>
+                        <div class="grid grid-cols-3 gap-4">
+                            <div class="text-center">
+                                <div
+                                    class="w-12 h-12 mx-auto mb-2 rounded-full bg-accent/10 flex items-center justify-center"
+                                >
+                                    <span class="text-xl">👃</span>
+                                </div>
+                                <p
+                                    class="text-xs text-text-muted uppercase mb-1"
+                                >
+                                    Nose
+                                </p>
+                                <p class="text-sm text-text font-medium">
+                                    {product.tastingNotes.nose}
+                                </p>
+                            </div>
+                            <div class="text-center">
+                                <div
+                                    class="w-12 h-12 mx-auto mb-2 rounded-full bg-accent/10 flex items-center justify-center"
+                                >
+                                    <span class="text-xl">👅</span>
+                                </div>
+                                <p
+                                    class="text-xs text-text-muted uppercase mb-1"
+                                >
+                                    Palate
+                                </p>
+                                <p class="text-sm text-text font-medium">
+                                    {product.tastingNotes.palate}
+                                </p>
+                            </div>
+                            <div class="text-center">
+                                <div
+                                    class="w-12 h-12 mx-auto mb-2 rounded-full bg-accent/10 flex items-center justify-center"
+                                >
+                                    <span class="text-xl">✨</span>
+                                </div>
+                                <p
+                                    class="text-xs text-text-muted uppercase mb-1"
+                                >
+                                    Finish
+                                </p>
+                                <p class="text-sm text-text font-medium">
+                                    {product.tastingNotes.finish}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Details Accordion -->
+            <div class="mt-16 max-w-4xl">
+                <details class="border-b border-border py-4" open>
+                    <summary
+                        class="font-display font-bold text-xl text-text cursor-pointer hover:text-accent transition-colors"
+                    >
+                        Production Details
+                    </summary>
+                    <div class="mt-4 space-y-3 text-text-muted">
+                        <p>
+                            <strong class="text-text">Master Distiller:</strong>
+                            {product.productionDetails.masterDistiller}
+                        </p>
+                        <p>
+                            <strong class="text-text">Agave:</strong>
+                            {product.productionDetails.agave}
+                        </p>
+                        <p>
+                            <strong class="text-text">Region:</strong>
+                            {product.productionDetails.region}
+                        </p>
+                        <p>
+                            <strong class="text-text">Process:</strong>
+                            {product.productionDetails.process}
+                        </p>
+                    </div>
+                </details>
+
+                <details class="border-b border-border py-4">
+                    <summary
+                        class="font-display font-bold text-xl text-text cursor-pointer hover:text-accent transition-colors"
+                    >
+                        Shipping & Returns
+                    </summary>
+                    <div class="mt-4 space-y-3 text-text-muted">
+                        <p>
+                            Free shipping on orders over $200. Standard shipping
+                            takes 3-5 business days.
+                        </p>
+                        <p>
+                            We accept returns within 30 days of purchase for
+                            unopened bottles.
+                        </p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- Related Products -->
+    {
+        relatedProducts.length > 0 && (
+            <section class="py-20 bg-primary-dark">
+                <div class="container">
+                    <h2 class="font-display font-bold text-3xl text-text mb-8">
+                        You May Also Like
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        {relatedProducts.map((p) => (
+                            <a href={`/products/${p.slug}`} class="card group">
+                                <div class="aspect-square mb-4 rounded-lg overflow-hidden bg-gradient-burgundy">
+                                    <img
+                                        src={p.image}
+                                        alt={p.name}
+                                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                    />
+                                </div>
+                                <h3 class="font-display font-bold text-lg text-text group-hover:text-accent transition-colors">
+                                    {p.name}
+                                </h3>
+                                <p class="text-text-muted text-sm mt-1">
+                                    ${p.price.toFixed(2)}
+                                </p>
+                            </a>
+                        ))}
+                    </div>
+                </div>
+            </section>
+        )
+    }
+</BaseLayout>
+
+<script>
+    // Quantity controls
+    const decreaseBtn = document.getElementById("decrease-qty");
+    const increaseBtn = document.getElementById("increase-qty");
+    const quantityInput = document.getElementById(
+        "quantity",
+    ) as HTMLInputElement;
+
+    decreaseBtn?.addEventListener("click", () => {
+        const currentValue = parseInt(quantityInput.value);
+        if (currentValue > 1) {
+            quantityInput.value = (currentValue - 1).toString();
+        }
+    });
+
+    increaseBtn?.addEventListener("click", () => {
+        const currentValue = parseInt(quantityInput.value);
+        quantityInput.value = (currentValue + 1).toString();
+    });
+</script>

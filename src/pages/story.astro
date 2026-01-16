@@ -1,0 +1,222 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Button from "../components/Button.astro";
+---
+
+<BaseLayout
+    title="Our Story | León de Guerrero Mezcal"
+    description="Discover the heritage and tradition behind León de Guerrero. From the heart of Oaxaca to your glass."
+>
+    <!-- Hero -->
+    <section class="relative py-32 overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <div
+                class="absolute inset-0 bg-gradient-to-b from-bg/80 via-bg/90 to-bg z-10"
+            >
+            </div>
+            <img
+                src="/images/oaxaca-landscape.jpg"
+                alt="Oaxaca landscape"
+                class="w-full h-full object-cover opacity-30"
+            />
+        </div>
+
+        <div class="container relative z-20 text-center">
+            <span
+                class="text-accent uppercase tracking-widest text-sm font-bold mb-4 block"
+            >
+                Our Heritage
+            </span>
+            <h1 class="font-display font-bold text-text mb-6">
+                Spirit of the<br />Warrior
+            </h1>
+            <p class="text-xl text-text-muted max-w-3xl mx-auto">
+                A legacy forged in the highlands of Oaxaca, where tradition
+                meets uncompromising quality.
+            </p>
+        </div>
+    </section>
+
+    <!-- Origin Story -->
+    <section class="py-20">
+        <div class="container">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div class="space-y-6">
+                    <h2 class="font-display font-bold text-4xl text-text">
+                        Born from the Earth
+                    </h2>
+                    <div class="space-y-4 text-text-muted text-lg">
+                        <p>
+                            In the rugged mountains of Oaxaca, where the earth
+                            meets the sky, León de Guerrero was born from a deep
+                            respect for tradition and an unwavering commitment
+                            to excellence.
+                        </p>
+                        <p>
+                            Our founder, inspired by the warrior spirit of his
+                            ancestors, set out to create mezcal that honors the
+                            ancient methods while embracing sustainable
+                            practices for future generations.
+                        </p>
+                        <p>
+                            Every bottle tells a story—of wild agave harvested
+                            at peak maturity, of maestros mezcaleros who have
+                            perfected their craft over decades, and of a land
+                            that gives generously to those who respect it.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="aspect-[4/5] rounded-2xl overflow-hidden">
+                    <img
+                        src="/images/founder.jpg"
+                        alt="Founder in agave field"
+                        class="w-full h-full object-cover"
+                    />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- The Process -->
+    <section class="py-20 bg-gradient-primary">
+        <div class="container">
+            <div class="text-center mb-16">
+                <h2 class="font-display font-bold text-4xl text-text mb-4">
+                    Crafted with Care
+                </h2>
+                <p class="text-text-muted max-w-2xl mx-auto">
+                    From harvest to bottle, every step is guided by tradition
+                    and respect for the land.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="text-center space-y-4">
+                    <div
+                        class="w-20 h-20 mx-auto rounded-full bg-accent/10 flex items-center justify-center"
+                    >
+                        <span class="text-4xl">🌱</span>
+                    </div>
+                    <h3 class="font-display font-bold text-xl text-text">
+                        Harvest
+                    </h3>
+                    <p class="text-text-muted">
+                        Wild agave, hand-selected at 8-25 years of maturity from
+                        high-altitude regions.
+                    </p>
+                </div>
+
+                <div class="text-center space-y-4">
+                    <div
+                        class="w-20 h-20 mx-auto rounded-full bg-accent/10 flex items-center justify-center"
+                    >
+                        <span class="text-4xl">🔥</span>
+                    </div>
+                    <h3 class="font-display font-bold text-xl text-text">
+                        Roast
+                    </h3>
+                    <p class="text-text-muted">
+                        Traditional earthen pit roasting for 3-5 days, infusing
+                        deep smoky character.
+                    </p>
+                </div>
+
+                <div class="text-center space-y-4">
+                    <div
+                        class="w-20 h-20 mx-auto rounded-full bg-accent/10 flex items-center justify-center"
+                    >
+                        <span class="text-4xl">⚙️</span>
+                    </div>
+                    <h3 class="font-display font-bold text-xl text-text">
+                        Crush
+                    </h3>
+                    <p class="text-text-muted">
+                        Tahona stone wheel crushing, preserving the agave's
+                        natural complexity.
+                    </p>
+                </div>
+
+                <div class="text-center space-y-4">
+                    <div
+                        class="w-20 h-20 mx-auto rounded-full bg-accent/10 flex items-center justify-center"
+                    >
+                        <span class="text-4xl">⚗️</span>
+                    </div>
+                    <h3 class="font-display font-bold text-xl text-text">
+                        Distill
+                    </h3>
+                    <p class="text-text-muted">
+                        Double distillation in copper pots for perfect balance
+                        and purity.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sustainability -->
+    <section class="py-20" id="sustainability">
+        <div class="container">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div class="aspect-video rounded-2xl overflow-hidden">
+                    <img
+                        src="/images/replanting.jpg"
+                        alt="Agave replanting program"
+                        class="w-full h-full object-cover"
+                    />
+                </div>
+
+                <div class="space-y-6">
+                    <h2 class="font-display font-bold text-4xl text-text">
+                        Sustainable Future
+                    </h2>
+                    <div class="space-y-4 text-text-muted text-lg">
+                        <p>
+                            We believe in giving back to the land that sustains
+                            us. For every agave harvested, we plant three more,
+                            ensuring future generations can continue this sacred
+                            tradition.
+                        </p>
+                        <p>
+                            Our partnerships with local communities create
+                            sustainable livelihoods while preserving traditional
+                            knowledge and protecting biodiversity.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-6 pt-4">
+                        <div>
+                            <p class="text-4xl font-bold text-accent mb-2">
+                                100%
+                            </p>
+                            <p class="text-text-muted">Organic Certified</p>
+                        </div>
+                        <div>
+                            <p class="text-4xl font-bold text-accent mb-2">
+                                3:1
+                            </p>
+                            <p class="text-text-muted">Replanting Ratio</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="py-20 bg-gradient-burgundy text-center">
+        <div class="container">
+            <h2 class="font-display font-bold text-4xl text-text mb-6">
+                Experience the Warrior Spirit
+            </h2>
+            <p class="text-text-muted text-lg mb-8 max-w-2xl mx-auto">
+                Discover our collection of artisanal mezcals, each bottle a
+                testament to tradition, quality, and the spirit of Oaxaca.
+            </p>
+            <Button href="/shop" variant="primary" size="lg">
+                Browse Our Collection
+            </Button>
+        </div>
+    </section>
+</BaseLayout>

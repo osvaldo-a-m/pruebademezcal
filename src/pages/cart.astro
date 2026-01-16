@@ -1,0 +1,317 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { cartItems, cartTotal, cartItemCount } from "../stores/cart";
+
+const title = "Shopping Cart | León de Guerrero";
+const description = "Review your mezcal selections and proceed to checkout";
+---
+
+<BaseLayout title={title} description={description}>
+    <div class="min-h-screen py-24">
+        <div class="container">
+            <h1
+                class="font-display text-4xl md:text-5xl font-bold text-text mb-8"
+            >
+                Shopping Cart
+            </h1>
+
+            <div id="cart-container" class="grid lg:grid-cols-3 gap-8">
+                <!-- Cart Items -->
+                <div class="lg:col-span-2">
+                    <div id="cart-items" class="space-y-4">
+                        <!-- Cart items will be rendered here by JavaScript -->
+                    </div>
+
+                    <div id="empty-cart" class="hidden text-center py-12">
+                        <svg
+                            class="w-24 h-24 mx-auto text-text-muted mb-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+                            ></path>
+                        </svg>
+                        <h2 class="text-2xl font-bold text-text mb-2">
+                            Your cart is empty
+                        </h2>
+                        <p class="text-text-muted mb-6">
+                            Add some mezcal to get started
+                        </p>
+                        <a href="/shop" class="btn-primary inline-block">
+                            Browse Mezcal
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Order Summary -->
+                <div class="lg:col-span-1">
+                    <div class="glass rounded-xl p-6 sticky top-24">
+                        <h2 class="text-2xl font-bold text-text mb-6">
+                            Order Summary
+                        </h2>
+
+                        <div class="space-y-4 mb-6">
+                            <div class="flex justify-between text-text">
+                                <span>Subtotal</span>
+                                <span id="cart-subtotal">$0.00</span>
+                            </div>
+                            <div class="flex justify-between text-text">
+                                <span>Shipping</span>
+                                <span class="text-text-muted"
+                                    >Calculated at checkout</span
+                                >
+                            </div>
+                            <div class="border-t border-border pt-4">
+                                <div
+                                    class="flex justify-between text-xl font-bold text-text"
+                                >
+                                    <span>Total</span>
+                                    <span id="cart-total">$0.00</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <a
+                            href="/checkout"
+                            id="checkout-btn"
+                            class="btn-primary w-full block text-center mb-4"
+                        >
+                            Proceed to Checkout
+                        </a>
+
+                        <a
+                            href="/shop"
+                            class="btn-secondary w-full block text-center"
+                        >
+                            Continue Shopping
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</BaseLayout>
+
+<script>
+    import {
+        cartItems,
+        cartTotal,
+        cartItemCount,
+        removeFromCart,
+        updateQuantity,
+    } from "../stores/cart";
+
+    // Render cart items
+    function renderCart() {
+        const items = cartItems.get();
+        const cartContainer = document.getElementById("cart-items");
+        const emptyCart = document.getElementById("empty-cart");
+        const checkoutBtn = document.getElementById("checkout-btn");
+
+        if (!cartContainer || !emptyCart) return;
+
+        if (items.length === 0) {
+            cartContainer.innerHTML = "";
+            emptyCart.classList.remove("hidden");
+            if (checkoutBtn)
+                checkoutBtn.classList.add("opacity-50", "pointer-events-none");
+            return;
+        }
+
+        emptyCart.classList.add("hidden");
+        if (checkoutBtn)
+            checkoutBtn.classList.remove("opacity-50", "pointer-events-none");
+
+        cartContainer.innerHTML = items
+            .map(
+                (item) => `
+      <div class="glass rounded-xl p-6 flex gap-6" data-product-id="${item.product.id}">
+        <div class="w-24 h-24 flex-shrink-0">
+          ${
+              item.product.image
+                  ? `
+            <img 
+              src="${item.product.image.src}" 
+              alt="${item.product.image.alt}"
+              class="w-full h-full object-cover rounded-lg"
+            />
+          `
+                  : `
+            <div class="w-full h-full bg-primary-light rounded-lg flex items-center justify-center">
+              <span class="text-4xl">🍶</span>
+            </div>
+          `
+          }
+        </div>
+
+        <div class="flex-1">
+          <h3 class="text-xl font-bold text-text mb-2">${item.product.name}</h3>
+          <p class="text-accent font-bold text-lg mb-4">$${parseFloat(item.product.price || "0").toFixed(2)}</p>
+
+          <div class="flex items-center gap-4">
+            <div class="flex items-center border border-border rounded-lg overflow-hidden">
+              <button 
+                class="quantity-btn px-3 py-1 hover:bg-primary-light transition-colors"
+                data-action="decrease"
+                data-product-id="${item.product.id}"
+              >
+                −
+              </button>
+              <input 
+                type="number" 
+                value="${item.quantity}" 
+                min="1"
+                class="w-16 text-center bg-transparent border-x border-border py-1"
+                data-product-id="${item.product.id}"
+              />
+              <button 
+                class="quantity-btn px-3 py-1 hover:bg-primary-light transition-colors"
+                data-action="increase"
+                data-product-id="${item.product.id}"
+              >
+                +
+              </button>
+            </div>
+
+            <button 
+              class="text-red-500 hover:text-red-400 transition-colors"
+              data-action="remove"
+              data-product-id="${item.product.id}"
+            >
+              Remove
+            </button>
+          </div>
+        </div>
+
+        <div class="text-right">
+          <p class="text-xl font-bold text-text">$${item.subtotal.toFixed(2)}</p>
+        </div>
+      </div>
+    `,
+            )
+            .join("");
+
+        // Add event listeners
+        attachEventListeners();
+    }
+
+    // Attach event listeners to cart buttons
+    function attachEventListeners() {
+        // Quantity buttons
+        document.querySelectorAll('[data-action="decrease"]').forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+                const target = e.target as HTMLElement;
+                const productId = target.dataset.productId;
+                if (productId) {
+                    const items = cartItems.get();
+                    const item = items.find((i) => i.product.id === productId);
+                    if (item) {
+                        updateQuantity(productId, item.quantity - 1);
+                    }
+                }
+            });
+        });
+
+        document.querySelectorAll('[data-action="increase"]').forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+                const target = e.target as HTMLElement;
+                const productId = target.dataset.productId;
+                if (productId) {
+                    const items = cartItems.get();
+                    const item = items.find((i) => i.product.id === productId);
+                    if (item) {
+                        updateQuantity(productId, item.quantity + 1);
+                    }
+                }
+            });
+        });
+
+        // Remove buttons
+        document.querySelectorAll('[data-action="remove"]').forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+                const target = e.target as HTMLElement;
+                const productId = target.dataset.productId;
+                if (productId) {
+                    removeFromCart(productId);
+                }
+            });
+        });
+
+        // Quantity inputs
+        document
+            .querySelectorAll('input[type="number"][data-product-id]')
+            .forEach((input) => {
+                input.addEventListener("change", (e) => {
+                    const target = e.target as HTMLInputElement;
+                    const productId = target.dataset.productId;
+                    const newQuantity = parseInt(target.value);
+                    if (productId && newQuantity > 0) {
+                        updateQuantity(productId, newQuantity);
+                    }
+                });
+            });
+    }
+
+    // Update totals
+    function updateTotals() {
+        const total = cartTotal.get();
+        const subtotalEl = document.getElementById("cart-subtotal");
+        const totalEl = document.getElementById("cart-total");
+
+        if (subtotalEl) subtotalEl.textContent = `$${total.toFixed(2)}`;
+        if (totalEl) totalEl.textContent = `$${total.toFixed(2)}`;
+    }
+
+    // Subscribe to cart changes
+    cartItems.subscribe(() => {
+        renderCart();
+        updateTotals();
+    });
+
+    // Initial render
+    renderCart();
+    updateTotals();
+</script>
+
+<style>
+    .btn-primary {
+        padding: 0.75rem 1.5rem;
+        background: var(--color-primary, #7cb342);
+        color: var(--color-bg, #0a1612);
+        border-radius: 0.5rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background: var(--color-primary-hover, #8bc34a);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(124, 179, 66, 0.3);
+    }
+
+    .btn-secondary {
+        padding: 0.75rem 1.5rem;
+        background: transparent;
+        color: var(--color-text, #e8f5e1);
+        border: 1px solid var(--color-border, #2d4a3e);
+        border-radius: 0.5rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+        background: var(--color-primary-light, #1a2f26);
+        border-color: var(--color-primary, #7cb342);
+    }
+
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+</style>

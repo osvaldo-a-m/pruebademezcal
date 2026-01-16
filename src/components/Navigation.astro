@@ -1,0 +1,133 @@
+---
+import { siteConfig } from "../lib/data.js";
+import CartIcon from "./CartIcon.astro";
+
+const currentPath = Astro.url.pathname;
+---
+
+<nav class="fixed top-0 left-0 right-0 z-50 glass border-b border-border/50">
+  <div class="container">
+    <div class="flex items-center justify-between h-20">
+      <!-- Logo -->
+      <a href="/" class="flex items-center gap-3 group">
+        <div
+          class="w-10 h-10 bg-accent rounded-lg flex items-center justify-center"
+        >
+          <span class="text-2xl">🦁</span>
+        </div>
+        <div class="flex flex-col">
+          <span
+            class="font-display font-bold text-lg leading-none text-text group-hover:text-accent transition-colors"
+          >
+            León de Guerrero
+          </span>
+          <span class="text-xs text-text-muted uppercase tracking-wider">
+            Spirit of the Warrior
+          </span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation -->
+      <div class="hidden md:flex items-center gap-8">
+        {
+          siteConfig.navigation.map((item) => (
+            <a
+              href={item.href}
+              class={`font-medium transition-colors ${
+                currentPath === item.href
+                  ? "text-accent"
+                  : "text-text hover:text-accent"
+              }`}
+            >
+              {item.name}
+            </a>
+          ))
+        }
+      </div>
+
+      <!-- Cart & Mobile Menu -->
+      <div class="flex items-center gap-4">
+        <CartIcon />
+
+        <!-- Mobile Menu Button -->
+        <button
+          id="mobile-menu-button"
+          class="md:hidden p-2 hover:text-accent transition-colors"
+          aria-label="Toggle menu"
+        >
+          <svg
+            class="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div
+    id="mobile-menu"
+    class="hidden md:hidden border-t border-border/50 bg-bg-card/95 backdrop-blur-lg"
+  >
+    <div class="container py-4 space-y-2">
+      {
+        siteConfig.navigation.map((item) => (
+          <a
+            href={item.href}
+            class={`block py-3 px-4 rounded-lg font-medium transition-all ${
+              currentPath === item.href
+                ? "bg-accent text-primary-dark"
+                : "text-text hover:bg-primary-light"
+            }`}
+          >
+            {item.name}
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</nav>
+
+<script>
+  // Mobile menu toggle
+  const mobileMenuButton = document.getElementById("mobile-menu-button");
+  const mobileMenu = document.getElementById("mobile-menu");
+
+  mobileMenuButton?.addEventListener("click", () => {
+    mobileMenu?.classList.toggle("hidden");
+  });
+
+  // Close mobile menu when clicking outside
+  document.addEventListener("click", (e) => {
+    if (
+      !mobileMenuButton?.contains(e.target as Node) &&
+      !mobileMenu?.contains(e.target as Node)
+    ) {
+      mobileMenu?.classList.add("hidden");
+    }
+  });
+
+  // Sticky header effect
+  let lastScroll = 0;
+  const nav = document.querySelector("nav");
+
+  window.addEventListener("scroll", () => {
+    const currentScroll = window.pageYOffset;
+
+    if (currentScroll <= 0) {
+      nav?.classList.remove("shadow-lg");
+    } else {
+      nav?.classList.add("shadow-lg");
+    }
+
+    lastScroll = currentScroll;
+  });
+</script>

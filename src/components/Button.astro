@@ -1,0 +1,43 @@
+---
+interface Props {
+    variant?: "primary" | "secondary" | "ghost";
+    size?: "sm" | "md" | "lg";
+    href?: string;
+    type?: "button" | "submit";
+    class?: string;
+}
+
+const {
+    variant = "primary",
+    size = "md",
+    href,
+    type = "button",
+    class: className = "",
+} = Astro.props;
+
+const sizeClasses = {
+    sm: "py-2 px-4 text-sm",
+    md: "py-3 px-6 text-base",
+    lg: "py-4 px-8 text-lg",
+};
+
+const variantClasses = {
+    primary: "btn-primary",
+    secondary: "btn-secondary",
+    ghost: "btn-ghost",
+};
+
+const classes = `btn ${variantClasses[variant]} ${sizeClasses[size]} ${className}`;
+---
+
+{
+    href ? (
+        <a href={href} class={classes}>
+            <slot />
+        </a>
+    ) : (
+        <button type={type} class={classes}>
+            <slot />
+        </button>
+    )
+}
